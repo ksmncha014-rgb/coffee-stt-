@@ -86,6 +86,58 @@ $('#signup-form').addEventListener('submit',e=>{e.preventDefault();authSubmit('s
 window.addEventListener('hashchange',()=>{const p=location.hash.slice(1);if(document.getElementById(p))showPage(p);});
 window.addEventListener('DOMContentLoaded',()=>{const p=location.hash.slice(1);if(document.getElementById(p))showPage(p);loadMember();if(!db)message('โหมดตัวอย่าง: หน้าเว็บและการเปลี่ยนหน้าทำงานแล้ว แต่สมาชิก/แต้ม/Admin ออนไลน์ต้องตั้งค่า Supabase ก่อน');});
 async function forgotPassword() {
+function showResetNotice(text, isError = false) {
+  const el = document.querySelector('#reset-notice');
+  el.textContent = text;
+  el.className = 'notice ' + (isError ? 'error' : 'ok');
+}
+
+document.querySelector('#reset-password-form')
+  .addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const password =
+      document.querySelector('#reset-new-password').value;
+    const confirm =
+      document.querySelector('#reset-confirm-password').value;
+
+    if (password.length < 6) {
+      showResetNotice('รหัสผ่านต้องมีอย่างน้อย 6 ตัว', true);
+      return;
+    }
+
+    if (password !== confirm) {
+      showResetNotice('รหัสผ่านทั้งสองช่องไม่ตรงกัน', true);
+      return;
+    }
+
+    if (!db) {
+      showResetNotice('ยังไม่ได้เชื่อมต่อ Supabase', true);
+      return;
+    }
+
+    const { error } = await db.auth.updateUser({ password });
+
+    if (error) {
+      showResetNotice(
+        'เปลี่ยนรหัสผ่านไม่สำเร็จ: ' + error.message,
+        true
+      );
+      return;
+    }
+
+    showResetNotice('เปลี่ยนรหัสผ่านสำเร็จแล้ว กรุณาเข้าสู่ระบบ');
+    document.querySelector('#reset-password-form').reset();
+  });
+
+if (db) {
+  db.auth.onAuthStateChange((event) => {
+    if (event === 'PASSWORD_RECOVERY') {
+      showPage('reset-password');
+    }
+  });
+  }
+                                                                                 
   if (!db) {
     message('ยังไม่ได้เชื่อมต่อ Supabase', 'error');
     return;
@@ -111,4 +163,43 @@ async function forgotPassword() {
   message('ส่งคำขอแล้ว กรุณาตรวจสอบอีเมลและโฟลเดอร์ Spam', 'ok');
 }
 </script>
+  
+<section id="reset-password" class="page section">
+  <span class="eyebrow">RESET PASSWORD</span>
+  <h2>ตั้งรหัสผ่านใหม่</h2>
+  <p class="muted">กรอกรหัสผ่านใหม่ของคุณ</p>
+
+  <div class="card">
+    <form id="reset-password-form">
+      <div class="field">
+        <label for="reset-new-password">รหัสผ่านใหม่</label>
+        <input
+          id="reset-new-password"
+          type="password"
+          minlength="6"
+          autocomplete="new-password"
+          required
+        >
+      </div>
+
+      <div class="field">
+        <label for="reset-confirm-password">ยืนยันรหัสผ่านใหม่</label>
+        <input
+          id="reset-confirm-password"
+          type="password"
+          minlength="6"
+          autocomplete="new-password"
+          required
+        >
+      </div>
+
+      <button class="btn" type="submit">
+        บันทึกรหัสผ่านใหม่
+      </button>
+
+      <p id="reset-notice" class="notice hide"></p>
+    </form>
+  </div>
+</section>
+  
 </body></html>
