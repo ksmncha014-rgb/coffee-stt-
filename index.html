@@ -46,8 +46,8 @@
 <script>
 /* ตั้งค่า Supabase URL และ anon/public key ที่ตัวแปรด้านล่างก่อนใช้งานจริง
  ห้ามใส่ service_role key ในไฟล์ HTML */
-const SUPABASE_URL = "ใส่_SUPABASE_PROJECT_URL";
-const SUPABASE_ANON_KEY = "ใส่_SUPABASE_ANON_KEY";
+const SUPABASE_URL = "https://tavzagsjrrxfcleuhjam.supabase.co/rest/v1/";
+const SUPABASE_ANON_KEY = "sb_publishable_a3cops62KpkagNYlCLd7fw_Y6dcLpqq";
 let db=null;
 if(window.supabase && SUPABASE_URL.startsWith("https://") && !SUPABASE_ANON_KEY.includes("ใส่_")){
  db=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
