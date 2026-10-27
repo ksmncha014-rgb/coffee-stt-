@@ -90,67 +90,73 @@ async function loadPoints(){const el=$('#points-content');updateRewardButtons(-1
 async function loadAdmin(){const el=$('#admin-content');if(!db){el.innerHTML='<div class="notice">กรุณาตั้งค่า Supabase ก่อนใช้ระบบ Admin</div>';return;}const u=await currentUser();if(!u){el.innerHTML='<div class="empty">กรุณาเข้าสู่ระบบบัญชีผู้ดูแลก่อน <p><button class="btn" onclick="showPage(\'member\')">เข้าสู่ระบบ</button></p></div>';return;}const {data:me}=await db.from('profiles').select('is_admin').eq('id',u.id).single();if(!me?.is_admin){el.innerHTML='<div class="notice error">บัญชีนี้ไม่มีสิทธิ์ผู้ดูแลระบบ</div>';return;}const {data:members,error}=await db.from('profiles').select('id,full_name,member_code,points').order('created_at',{ascending:false});if(error){el.innerHTML='<div class="notice error">โหลดสมาชิกไม่สำเร็จ</div>';return;}el.innerHTML='<div class="notice ok">ผู้ดูแลระบบ · สมาชิก '+members.length+' คน</div><div class="tablewrap"><table><thead><tr><th>ชื่อสมาชิก</th><th>รหัส</th><th>แต้ม</th><th>ปรับแต้ม</th></tr></thead><tbody>'+members.map(m=>'<tr><td>'+escapeHtml(m.full_name)+'</td><td>'+escapeHtml(m.member_code)+'</td><td>'+m.points+'</td><td><div class="right"><input id="amt-'+m.id+'" type="number" min="1" value="1"><button class="btn" onclick="changePoints(\''+m.id+'\',1)">+ เพิ่ม</button><button class="btn danger" onclick="changePoints(\''+m.id+'\',-1)">− ลด</button></div></td></tr>').join('')+'</tbody></table></div>';}
 async function changePoints(id,sign){const amount=Number($('#amt-'+id).value);if(!Number.isInteger(amount)||amount<1){alert('ใส่แต้มเป็นจำนวนเต็มมากกว่า 0');return;}const reason=prompt('เหตุผลในการปรับแต้ม');if(!reason)return;const {error}=await db.rpc('admin_adjust_points',{target_member:id,delta:amount*sign,transaction_reason:reason});if(error)alert('ปรับแต้มไม่สำเร็จ: '+error.message);else{alert('ปรับแต้มสำเร็จ');loadAdmin();}}
 $('#signup-form').addEventListener('submit',e=>{e.preventDefault();authSubmit('signup')});$('#login-form').addEventListener('submit',e=>{e.preventDefault();authSubmit('login')});
-if(db){
-  db.auth.onAuthStateChange((event, session)=>{
-    if(event === 'PASSWORD_RECOVERY'){
+
+if (db) {
+  db.auth.onAuthStateChange((event, session) => {
+    if (event === 'PASSWORD_RECOVERY') {
       showPage('reset-password');
     }
   });
 }
 
-$('#reset-password-form').addEventListener('submit', async e=>{
-  e.preventDefault();
+const resetForm = $('#reset-password-form');
 
-  const password = $('#new-password').value;
-  const confirmPassword = $('#confirm-password').value;
-  const notice = $('#reset-password-message');
-  
+if (resetForm) {
+  resetForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-  if(password.length < 6){
-    notice.textContent = 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร';
-    notice.className = 'notice error';
-    return;
-  }
+    const password = $('#new-password').value;
+    const confirmPassword = $('#confirm-password').value;
+    const notice = $('#reset-password-message');
+    const button = resetForm.querySelector('button[type="submit"]');
 
-  if(password !== confirmPassword){
-    notice.textContent = 'รหัสผ่านทั้งสองช่องไม่ตรงกัน';
-    notice.className = 'notice error';
-    return;
-  }
+    if (password.length < 6) {
+      notice.textContent = 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร';
+      notice.className = 'notice error';
+      return;
+    }
 
-  if(!db){
-    notice.textContent = 'ยังเชื่อมต่อระบบไม่ได้ กรุณาลองใหม่';
-    notice.className = 'notice error';
-    return;
-  }
+    if (password !== confirmPassword) {
+      notice.textContent = 'รหัสผ่านทั้งสองช่องไม่ตรงกัน';
+      notice.className = 'notice error';
+      return;
+    }
 
-  button.disabled = true;
-  buttoconst button = $('#reset-password-form button[type="submit"]';n.textContent = 'กำลังบันทึก...';
+    if (!db) {
+      notice.textContent = 'ยังเชื่อมต่อระบบไม่ได้ กรุณาลองใหม่';
+      notice.className = 'notice error';
+      return;
+    }
+    
+    button.disabled = true;
+button.textContent = 'กำลังบันทึก...';
 
-  try{
-    const {error} = await db.auth.updateUser({password});
+try {
+  const { error } = await db.auth.updateUser({ password });
 
-    if(error) throw error;
+  if (error) throw error;
 
-    notice.textContent = 'เปลี่ยนรหัสผ่านสำเร็จแล้ว กรุณาเข้าสู่ระบบ';
-    notice.className = 'notice ok';
-    $('#new-password').value = '';
-    $('#confirm-password').value = '';
+  notice.textContent = 'เปลี่ยนรหัสผ่านสำเร็จแล้ว กรุณาเข้าสู่ระบบ';
+  notice.className = 'notice ok';
 
-    setTimeout(()=>{
-      showPage('member');
-      message('ตั้งรหัสผ่านใหม่สำเร็จ กรุณาเข้าสู่ระบบ','ok');
-    },1500);
+  $('#new-password').value = '';
+  $('#confirm-password').value = '';
 
-  }catch(error){
-    notice.textContent = 'เปลี่ยนรหัสผ่านไม่สำเร็จ: ' + error.message;
-    notice.className = 'notice error';
-  }finally{
-    button.disabled = false;
-    button.textContent = 'บันทึกรหัสผ่านใหม่';
-  }
+  setTimeout(() => {
+    showPage('member');
+    message('ตั้งรหัสผ่านใหม่สำเร็จ กรุณาเข้าสู่ระบบ', 'ok');
+  }, 1500);
+
+} catch (error) {
+  notice.textContent = 'เปลี่ยนรหัสผ่านไม่สำเร็จ: ' + error.message;
+  notice.className = 'notice error';
+
+} finally {
+  button.disabled = false;
+  button.textContent = 'บันทึกรหัสผ่านใหม่';
+}
 });
- 
+}
 window.addEventListener('hashchange',()=>{const p=location.hash.slice(1);if(document.getElementById(p))showPage(p);});
 window.addEventListener('DOMContentLoaded',()=>{const p=location.hash.slice(1);if(document.getElementById(p))showPage(p);loadMember();if(!db)message('โหมดตัวอย่าง: หน้าเว็บและการเปลี่ยนหน้าทำงานแล้ว แต่สมาชิก/แต้ม/Admin ออนไลน์ต้องตั้งค่า Supabase ก่อน');});
 </script>
