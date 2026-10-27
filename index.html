@@ -42,7 +42,24 @@
 </section>
 <section id="points" class="page section"><span class="eyebrow">REWARDS & POINTS</span><h2>แต้มสะสมของคุณ</h2><p class="muted">สะสมแต้มและเลือกรางวัลที่ต้องการแลกได้เลย</p><div id="points-content" class="card" style="margin-top:20px">กรุณาเชื่อมฐานข้อมูลและเข้าสู่ระบบ</div><div class="sectionhead" style="margin-top:26px"><div><span class="eyebrow">MEMBER REWARDS</span><h2 style="font-size:28px">แลกรางวัลของคุณ</h2><p class="muted">ปุ่มแลกรางวัลจะเปิดเมื่อมีแต้มครบตามกำหนด</p></div></div><div class="grid" id="rewards-grid" style="margin-top:18px"><div class="card"><div class="featureicon">🏷️</div><h3>ส่วนลด 20%</h3><p>รับส่วนลด 20% สำหรับการซื้อ</p><span class="pill">15 แต้ม</span><button class="btn reward-btn" id="reward-15" disabled style="width:100%;margin-top:16px" onclick="redeemReward(15,'ส่วนลด 20%')">แต้มไม่เพียงพอ</button></div><div class="card"><div class="featureicon">☕</div><h3>กาแฟร้อนฟรี</h3><p>แลกกาแฟร้อน 1 แก้ว</p><span class="pill">20 แต้ม</span><button class="btn reward-btn" id="reward-20" disabled style="width:100%;margin-top:16px" onclick="redeemReward(20,'กาแฟร้อนฟรี')">แต้มไม่เพียงพอ</button></div><div class="card"><div class="featureicon">🧋</div><h3>เครื่องดื่มเย็นฟรี</h3><p>แลกเครื่องดื่มเย็น 1 แก้ว</p><span class="pill">30 แต้ม</span><button class="btn reward-btn" id="reward-30" disabled style="width:100%;margin-top:16px" onclick="redeemReward(30,'เครื่องดื่มเย็นฟรี')">แต้มไม่เพียงพอ</button></div><div class="card"><div class="featureicon">🎁</div><h3>ซื้อ 1 แถม 1</h3><p>รับสิทธิ์ซื้อเครื่องดื่ม 1 แก้ว แถม 1 แก้ว</p><span class="pill">40 แต้ม</span><button class="btn reward-btn" id="reward-40" disabled style="width:100%;margin-top:16px" onclick="redeemReward(40,'ซื้อ 1 แถม 1')">แต้มไม่เพียงพอ</button></div><div class="card"><div class="featureicon">⭐</div><h3>แลกเมนูใดก็ได้</h3><p>เลือกเครื่องดื่ม 1 เมนูจากรายการของร้าน</p><span class="pill">50 แต้ม</span><button class="btn reward-btn" id="reward-50" disabled style="width:100%;margin-top:16px" onclick="redeemReward(50,'แลกเมนูใดก็ได้')">แต้มไม่เพียงพอ</button></div></div><div class="notice" style="margin-top:16px">หมายเหตุ: การกดปุ่มเป็นการแจ้งความประสงค์แลกรางวัลเท่านั้น กรุณาให้พนักงานตรวจสอบและยืนยันการแลกแต้มก่อนรับสิทธิ์</div><div class="card" style="margin-top:18px"><h3>ประวัติแต้ม</h3><div class="tablewrap"><table><thead><tr><th>วันเวลา</th><th>แต้ม</th><th>รายละเอียด</th></tr></thead><tbody id="point-history"><tr><td colspan="3" class="empty">เข้าสู่ระบบเพื่อดูประวัติแต้ม</td></tr></tbody></table></div></div><div class="actions"><button class="btn" onclick="showPage('member')">เข้าสู่ระบบสมาชิก</button><button class="btn secondary" onclick="showPage('home')">กลับหน้าแรก</button></div></section>
 <section id="admin" class="page section"><span class="eyebrow">ADMIN ONLY</span><h2>จัดการสมาชิกและแต้ม</h2><p class="muted">หน้านี้จำกัดสิทธิ์ผู้ดูแลที่กำหนดในฐานข้อมูล</p><div class="notice">เพิ่ม/ลดแต้มจะทำงานเมื่อเชื่อม Supabase และกำหนดสิทธิ์ Admin แล้ว</div><div id="admin-content" class="card">ยังไม่ได้เชื่อมฐานข้อมูล</div><div class="actions"><button class="btn secondary" onclick="showPage('member')">ไปหน้าสมาชิก</button><button class="btn outline" onclick="showPage('home')">กลับหน้าแรก</button></div></section>
-</main><footer class="footer"><div class="wrap">© Coffee STTC · Made with ☕ and warmth</div></footer>
+</main><section id="reset-password" class="page section">
+  <div class="card">
+    <h2>ตั้งรหัสผ่านใหม่</h2>
+    <p class="muted">กรอกรหัสผ่านใหม่สำหรับบัญชีของคุณ</p>
+    <form id="reset-password-form">
+      <div class="field">
+        <label for="new-password">รหัสผ่านใหม่</label>
+        <input id="new-password" type="password" minlength="6" autocomplete="new-password" required>
+      </div>
+      <div class="field">
+        <label for="confirm-password">ยืนยันรหัสผ่านใหม่</label>
+        <input id="confirm-password" type="password" minlength="6" autocomplete="new-password" required>
+      </div>
+      <button class="btn" type="submit">บันทึกรหัสผ่านใหม่</button>
+      <p id="reset-password-message" class="notice"></p>
+    </form>
+  </div>
+</section><footer class="footer"><div class="wrap">© Coffee STTC · Made with ☕ and warmth</div></footer>
 <script>
 /* ตั้งค่า Supabase URL และ anon/public key ที่ตัวแปรด้านล่างก่อนใช้งานจริง
  ห้ามใส่ service_role key ในไฟล์ HTML */
@@ -73,6 +90,67 @@ async function loadPoints(){const el=$('#points-content');updateRewardButtons(-1
 async function loadAdmin(){const el=$('#admin-content');if(!db){el.innerHTML='<div class="notice">กรุณาตั้งค่า Supabase ก่อนใช้ระบบ Admin</div>';return;}const u=await currentUser();if(!u){el.innerHTML='<div class="empty">กรุณาเข้าสู่ระบบบัญชีผู้ดูแลก่อน <p><button class="btn" onclick="showPage(\'member\')">เข้าสู่ระบบ</button></p></div>';return;}const {data:me}=await db.from('profiles').select('is_admin').eq('id',u.id).single();if(!me?.is_admin){el.innerHTML='<div class="notice error">บัญชีนี้ไม่มีสิทธิ์ผู้ดูแลระบบ</div>';return;}const {data:members,error}=await db.from('profiles').select('id,full_name,member_code,points').order('created_at',{ascending:false});if(error){el.innerHTML='<div class="notice error">โหลดสมาชิกไม่สำเร็จ</div>';return;}el.innerHTML='<div class="notice ok">ผู้ดูแลระบบ · สมาชิก '+members.length+' คน</div><div class="tablewrap"><table><thead><tr><th>ชื่อสมาชิก</th><th>รหัส</th><th>แต้ม</th><th>ปรับแต้ม</th></tr></thead><tbody>'+members.map(m=>'<tr><td>'+escapeHtml(m.full_name)+'</td><td>'+escapeHtml(m.member_code)+'</td><td>'+m.points+'</td><td><div class="right"><input id="amt-'+m.id+'" type="number" min="1" value="1"><button class="btn" onclick="changePoints(\''+m.id+'\',1)">+ เพิ่ม</button><button class="btn danger" onclick="changePoints(\''+m.id+'\',-1)">− ลด</button></div></td></tr>').join('')+'</tbody></table></div>';}
 async function changePoints(id,sign){const amount=Number($('#amt-'+id).value);if(!Number.isInteger(amount)||amount<1){alert('ใส่แต้มเป็นจำนวนเต็มมากกว่า 0');return;}const reason=prompt('เหตุผลในการปรับแต้ม');if(!reason)return;const {error}=await db.rpc('admin_adjust_points',{target_member:id,delta:amount*sign,transaction_reason:reason});if(error)alert('ปรับแต้มไม่สำเร็จ: '+error.message);else{alert('ปรับแต้มสำเร็จ');loadAdmin();}}
 $('#signup-form').addEventListener('submit',e=>{e.preventDefault();authSubmit('signup')});$('#login-form').addEventListener('submit',e=>{e.preventDefault();authSubmit('login')});
+if(db){
+  db.auth.onAuthStateChange((event, session)=>{
+    if(event === 'PASSWORD_RECOVERY'){
+      showPage('reset-password');
+    }
+  });
+}
+
+$('#reset-password-form').addEventListener('submit', async e=>{
+  e.preventDefault();
+
+  const password = $('#new-password').value;
+  const confirmPassword = $('#confirm-password').value;
+  const notice = $('#reset-password-message');
+  
+
+  if(password.length < 6){
+    notice.textContent = 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร';
+    notice.className = 'notice error';
+    return;
+  }
+
+  if(password !== confirmPassword){
+    notice.textContent = 'รหัสผ่านทั้งสองช่องไม่ตรงกัน';
+    notice.className = 'notice error';
+    return;
+  }
+
+  if(!db){
+    notice.textContent = 'ยังเชื่อมต่อระบบไม่ได้ กรุณาลองใหม่';
+    notice.className = 'notice error';
+    return;
+  }
+
+  button.disabled = true;
+  buttoconst button = $('#reset-password-form button[type="submit"]';n.textContent = 'กำลังบันทึก...';
+
+  try{
+    const {error} = await db.auth.updateUser({password});
+
+    if(error) throw error;
+
+    notice.textContent = 'เปลี่ยนรหัสผ่านสำเร็จแล้ว กรุณาเข้าสู่ระบบ';
+    notice.className = 'notice ok';
+    $('#new-password').value = '';
+    $('#confirm-password').value = '';
+
+    setTimeout(()=>{
+      showPage('member');
+      message('ตั้งรหัสผ่านใหม่สำเร็จ กรุณาเข้าสู่ระบบ','ok');
+    },1500);
+
+  }catch(error){
+    notice.textContent = 'เปลี่ยนรหัสผ่านไม่สำเร็จ: ' + error.message;
+    notice.className = 'notice error';
+  }finally{
+    button.disabled = false;
+    button.textContent = 'บันทึกรหัสผ่านใหม่';
+  }
+});
+ 
 window.addEventListener('hashchange',()=>{const p=location.hash.slice(1);if(document.getElementById(p))showPage(p);});
 window.addEventListener('DOMContentLoaded',()=>{const p=location.hash.slice(1);if(document.getElementById(p))showPage(p);loadMember();if(!db)message('โหมดตัวอย่าง: หน้าเว็บและการเปลี่ยนหน้าทำงานแล้ว แต่สมาชิก/แต้ม/Admin ออนไลน์ต้องตั้งค่า Supabase ก่อน');});
 </script>
