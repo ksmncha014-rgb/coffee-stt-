@@ -205,7 +205,7 @@ if (db) {
   }
 
   const { error } = await db.auth.resetPasswordForEmail(email, {
-    redirectTo: 'https://ksmncha014-rgb.github.io/coffee-stt-/#reset-password'
+    redirectTo: 'https://ksmncha014-rgb.github.io/coffee-stt-/?reset-password=1'
   });
 
   if (error) {
